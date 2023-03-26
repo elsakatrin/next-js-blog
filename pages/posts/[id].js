@@ -18,12 +18,16 @@ export async function getStaticProps({ params }) {
     };
   }
 //getStaticPaths can fetch data from any data scource
+//in development getStaticPaths runs on every request but in production it runs at buildtime
 export async function getStaticPaths() {
     // Paths contain the array of know paths returned by getAllPostsIds() which include the params defined by pages/posts/[id].js
     const paths = getAllPostIds();
     return {
       paths,
       fallback: false,
+      //If fallback is false, then any paths not returned by getStaticPaths will resault in a 404 page
+      //IF fallback is true, then the behavior of getstaticprops changes, the paths returned from it will be rendered to HTML at build time, the paths that have not been generated at build time will not be resulted in 404 pages
+      //instead next will serve a fallback version of the page on the first request to such a path. In the background next will statically generate a requested path.
     };
   }
 //Generate dynamic routes
